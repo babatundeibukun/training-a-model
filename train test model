@@ -51,3 +51,15 @@ test_preds = rf_model_on_full_data.predict(test_X)
 output = pd.DataFrame({'Id': test_data.Id,
                        'SalePrice': test_preds})
 output.to_csv('submission.csv', index=False)
+
+#how to handle missing values 
+# Get names of columns with missing values
+cols_with_missing = [col for col in X_train.columns
+                     if X_train[col].isnull().any()]
+
+# Drop columns in training and validation data
+reduced_X_train = X_train.drop(cols_with_missing, axis=1)
+reduced_X_valid = X_valid.drop(cols_with_missing, axis=1)
+
+print("MAE from Approach 1 (Drop columns with missing values):")
+print(score_dataset(reduced_X_train, reduced_X_valid, y_train, y_valid))
